@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "E-commerce App",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/src/main.ts",
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+      "preLaunchTask": "tsc: build - tsconfig.json",
+      "sourceMaps": true,
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/**",
+        "!**/node_modules/**"
+      ],
+      "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
+      "env": { "NODE_ENV": "development" }
+    }
+  ]
+}
