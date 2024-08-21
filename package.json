@@ -6,7 +6,7 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "build": "rm -r dist/ && tsc -p tsconfig.build.json",
+    "build": "[ -d \"dist\" ] && rm -r dist; tsc -p tsconfig.build.json",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "node dist/main",
     "start:dev": "nodemon --watch src --ext ts --exec ts-node src/main.ts",
