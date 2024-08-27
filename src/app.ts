@@ -4,12 +4,13 @@ import { Routes } from './enums'
 import { ApiRoute, HelloWorldRouter } from './routes'
 import { pathDoesNotExist } from './middlewares/route-not-found.middleware'
 import { connectToDatabase } from './config/data-source'
+import { env } from './config/env'
 
 export class App {
   private readonly _app: Application = express()
   private readonly _router: Router = Router()
   private readonly _apiRoute: string = `/${Routes.API}`
-  private readonly _port: number = +process.env.PORT
+  private readonly _port: number = env.appPort
 
   constructor(
     readonly helloWorldRouter = new HelloWorldRouter(),
@@ -22,6 +23,9 @@ export class App {
     await connectToDatabase()
     this._middleware()
     this._routes()
+    console.log(
+      `⚡️[server]: Server is running at ${env.appBaseUrl}:${this._port}${this._apiRoute}`
+    )
   }
 
   private _middleware(): void {
@@ -44,10 +48,6 @@ export class App {
   }
 
   public listener(): void {
-    this._app.listen(this._port, () => {
-      console.log(
-        `⚡️[server]: Server is running at ${process.env.BASE_URL}:${this._port}${this._apiRoute}`
-      )
-    })
+    this._app.listen(this._port)
   }
 }

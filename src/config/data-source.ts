@@ -1,20 +1,21 @@
 import { DataSource } from 'typeorm'
 import * as models from '../models'
+import { env } from './env'
 
 const modelsArray = Object.values(models)
 
 const AppDataSource = new DataSource({
-  database: process.env.DATABASE_NAME,
+  database: env.dbName,
   entities: [...modelsArray],
-  host: process.env.DATABASE_HOST,
+  host: env.dbHost,
   logging: false,
   migrations: [],
-  password: process.env.DATABASE_PASSWORD,
-  port: Number(process.env.DATABASE_PORT),
+  password: env.dbPassword,
+  port: env.dbPort,
   subscribers: [],
   synchronize: true,
   type: 'mysql',
-  username: process.env.DATABASE_USER
+  username: env.dbUser
 })
 
 export const connectToDatabase = async () => {
@@ -37,7 +38,10 @@ export const connectToDatabase = async () => {
       })
     }
   }
-  if (!attempts) {
-    console.error(`Not able to connect to database after ${attempts} attempts`)
+
+  if (count === attempts) {
+    throw new Error(
+      `Not able to connect to database after ${attempts} attempts`
+    )
   }
 }
