@@ -5,7 +5,7 @@ export class User extends BaseEntity {
   @Column({
     comment: 'user name',
     length: 50,
-    type: 'char',
+    type: 'varchar',
     default: 'John Doe'
   })
   name: string
@@ -14,7 +14,8 @@ export class User extends BaseEntity {
     comment: 'user email',
     length: 60,
     nullable: false,
-    type: 'varchar'
+    type: 'varchar',
+    unique: true
   })
   email: string
 

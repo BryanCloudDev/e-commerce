@@ -1,4 +1,3 @@
-// import { User } from "./user.model"
 import { Column, Entity, ManyToOne } from 'typeorm'
 import { OrderStatus } from '../enums'
 import { BaseEntity, User } from './'
@@ -22,7 +21,7 @@ export class Order extends BaseEntity {
   @Column({
     comment: 'date when the order was placed',
     name: 'placed_at',
-    type: 'timestamp',
+    type: 'datetime',
     default: () => 'CURRENT_TIMESTAMP'
   })
   placedAt: Date
@@ -36,8 +35,7 @@ export class Order extends BaseEntity {
   @Column({
     comment: 'status of the order',
     default: OrderStatus.Pending,
-    enum: OrderStatus,
-    type: 'enum'
+    type: 'varchar'
   })
   status: OrderStatus
 
