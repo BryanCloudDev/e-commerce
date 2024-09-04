@@ -5,7 +5,7 @@ import { Logger } from './logger'
 
 const modelsArray = Object.values(models)
 
-const AppDataSource = new DataSource({
+export const AppDataSource = new DataSource({
   database: env.dbName,
   entities: [...modelsArray],
   host: env.dbHost,
