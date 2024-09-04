@@ -5,6 +5,7 @@ import { ApiRoute, HelloWorldRouter } from './routes'
 import { pathDoesNotExist } from './middlewares/route-not-found.middleware'
 import { connectToDatabase } from './config/data-source'
 import { env } from './config/env'
+import { Logger } from './config/logger'
 
 export class App {
   private readonly _app: Application = express()
@@ -19,12 +20,14 @@ export class App {
     this.initialize()
   }
 
+  private readonly logger = new Logger(App.name)
+
   private async initialize(): Promise<void> {
     await connectToDatabase()
     this._middleware()
     this._routes()
-    console.log(
-      `⚡️[server]: Server is running at ${env.appBaseUrl}:${this._port}${this._apiRoute}`
+    this.logger.info(
+      `⚡️Server is running at ${env.appBaseUrl}:${this._port}${this._apiRoute}`
     )
   }
 

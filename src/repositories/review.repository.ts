@@ -6,6 +6,7 @@ import {
   Repository
 } from 'typeorm'
 import { CreateReview } from '../interfaces'
+import { Logger } from '../config/logger'
 import { Review } from '../models'
 
 export class ReviewRepository extends Repository<Review> {
@@ -17,15 +18,19 @@ export class ReviewRepository extends Repository<Review> {
     super(target, manager, queryRunner)
   }
 
+  private readonly logger = new Logger(ReviewRepository.name)
+
   /**
    * Finds reviews by user id.
    * @param id - The id of the user whose reviews are to be retrieved.
    * @returns A promise that resolves to an array of reviews associated with the given user id.
    */
   async findByUserId(id: number): Promise<Review[]> {
+    this.logger.info('findByUserId')
     try {
       return await this.find({ where: { user: { id } } })
     } catch (error) {
+      this.logger.error(error.message)
       throw new Error(`Error finding reviews by user id: ${error.message}`)
     }
   }
@@ -36,9 +41,11 @@ export class ReviewRepository extends Repository<Review> {
    * @returns A promise that resolves to the found review, or `null` if not found.
    */
   async findById(id: number): Promise<Review | null> {
+    this.logger.info('findById')
     try {
       return await this.findOne({ where: { id } })
     } catch (error) {
+      this.logger.error(error.message)
       throw new Error(`Error finding review by id: ${error.message}`)
     }
   }
@@ -49,10 +56,12 @@ export class ReviewRepository extends Repository<Review> {
    * @returns A promise that resolves to the created review.
    */
   async createReview(review: CreateReview): Promise<Review> {
+    this.logger.info('createReview')
     try {
       const reviewInstance = this.create(review)
       return await this.save(reviewInstance)
     } catch (error) {
+      this.logger.error(error.message)
       throw new Error(`Error creating review: ${error.message}`)
     }
   }
@@ -63,13 +72,12 @@ export class ReviewRepository extends Repository<Review> {
    * @param updateData - A partial object containing the review fields to be updated.
    * @returns A promise that resolves 'void' when the operation is complete.
    */
-  async updateReviewById(
-    id: number,
-    updateData: Partial<Review>
-  ): Promise<void> {
+  async updateById(id: number, updateData: Partial<Review>): Promise<void> {
+    this.logger.info('updateById')
     try {
       await this.update(id, updateData)
     } catch (error) {
+      this.logger.error(error.message)
       throw new Error(`Error updating review by id: ${error.message}`)
     }
   }
@@ -79,10 +87,12 @@ export class ReviewRepository extends Repository<Review> {
    * @param id - The id of the review.
    * @returns A promise that resolves 'void' when the operation is complete.
    */
-  async deleteReviewById(id: number): Promise<void> {
+  async deleteById(id: number): Promise<void> {
+    this.logger.info('deleteById')
     try {
       await this.delete(id)
     } catch (error) {
+      this.logger.error(error.message)
       throw new Error(`Error deleting review by id: ${error.message}`)
     }
   }

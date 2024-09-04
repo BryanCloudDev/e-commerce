@@ -5,7 +5,6 @@ const { combine, colorize, printf, timestamp } = winston.format
 
 const customFormat = printf(({ level, message, timestamp }) => {
   const { location, message: sentMessage } = JSON.parse(message)
-  console.log(location, sentMessage)
 
   return `[E-COMMERCE] - ${moment.formatTimestamp(timestamp)} [${level}]  [${location}]: ${sentMessage}`
 })
@@ -13,11 +12,7 @@ const customFormat = printf(({ level, message, timestamp }) => {
 const logger = winston.createLogger({
   level: 'debug',
   format: combine(timestamp(), colorize(), customFormat),
-  transports: [
-    new winston.transports.Console(),
-    new winston.transports.File({ filename: 'errors.log', level: 'error' }),
-    new winston.transports.File({ filename: 'combined.log' })
-  ]
+  transports: [new winston.transports.Console()]
 })
 
 export class Logger {

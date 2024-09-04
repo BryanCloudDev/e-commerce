@@ -6,6 +6,7 @@ import {
   Repository
 } from 'typeorm'
 import { CreateUser } from '../interfaces'
+import { Logger } from '../config/logger'
 import { User } from '../models'
 
 export class UserRepository extends Repository<User> {
@@ -17,15 +18,19 @@ export class UserRepository extends Repository<User> {
     super(target, manager, queryRunner)
   }
 
+  private readonly logger = new Logger(UserRepository.name)
+
   /**
    * Finds a user by the email address.
    * @param email - The email address of the user.
    * @returns A promise that resolves to the found user, or `null` if not found.
    */
   async findByEmail(email: string): Promise<User | null> {
+    this.logger.info('findByEmail')
     try {
       return await this.findOne({ where: { email } })
     } catch (error) {
+      this.logger.error(error.message)
       throw new Error(`Error finding user by email: ${error.message}`)
     }
   }
@@ -36,9 +41,11 @@ export class UserRepository extends Repository<User> {
    * @returns A promise that resolves to the found user, or `null` if not found.
    */
   async findById(id: number): Promise<User | null> {
+    this.logger.info('findById')
     try {
       return await this.findOne({ where: { id } })
     } catch (error) {
+      this.logger.error(error.message)
       throw new Error(`Error finding user by id: ${error.message}`)
     }
   }
@@ -49,12 +56,14 @@ export class UserRepository extends Repository<User> {
    * @returns A promise that resolves to the created user.
    */
   async createUser(user: CreateUser): Promise<User> {
+    this.logger.info('createUser')
     const { name, email, password } = user
 
     try {
       const userInstance = this.create({ name, email, password })
       return await this.save(userInstance)
     } catch (error) {
+      this.logger.error(error.message)
       throw new Error(`Error creating user: ${error.message}`)
     }
   }
@@ -65,13 +74,12 @@ export class UserRepository extends Repository<User> {
    * @param updateData - The partial user data to be updated.
    * @returns A promise that resolves 'void' when the operation is complete.
    */
-  async updateUserById(
-    id: number,
-    updateData: Partial<CreateUser>
-  ): Promise<void> {
+  async updateById(id: number, updateData: Partial<CreateUser>): Promise<void> {
+    this.logger.info('updateById')
     try {
       await this.update(id, updateData)
     } catch (error) {
+      this.logger.error(error.message)
       throw new Error(`Error updating user by id: ${error.message}`)
     }
   }
@@ -81,10 +89,12 @@ export class UserRepository extends Repository<User> {
    * @param id - The id of the user.
    * @returns A promise that resolves 'void' when the operation is complete.
    */
-  async deleteUser(id: number): Promise<void> {
+  async deleteById(id: number): Promise<void> {
+    this.logger.info('deleteById')
     try {
       await this.delete(id)
     } catch (error) {
+      this.logger.error(error.message)
       throw new Error(`Error deleting user by id: ${error.message}`)
     }
   }

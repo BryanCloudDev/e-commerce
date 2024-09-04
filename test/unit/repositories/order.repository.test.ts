@@ -157,7 +157,7 @@ describe('OrderRepository', () => {
         ...order
       })
 
-      const actual = await orderRepository.updateOrderById(1, {
+      const actual = await orderRepository.updateById(1, {
         status: OrderStatus.Cancelled
       })
 
@@ -171,7 +171,7 @@ describe('OrderRepository', () => {
       })
 
       try {
-        await orderRepository.updateOrderById(1, {
+        await orderRepository.updateById(1, {
           status: OrderStatus.Cancelled
         })
       } catch (error) {
@@ -194,7 +194,7 @@ describe('OrderRepository', () => {
         ...order
       })
 
-      const actual = await orderRepository.deleteOrderById(1)
+      const actual = await orderRepository.deleteById(1)
 
       expect(actual).toBe(undefined)
     })
@@ -206,7 +206,7 @@ describe('OrderRepository', () => {
       })
 
       try {
-        await orderRepository.deleteOrderById(1)
+        await orderRepository.deleteById(1)
       } catch (error) {
         expect(error).toBeInstanceOf(Error)
         expect(error.message).toBe(

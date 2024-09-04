@@ -118,7 +118,7 @@ describe('UserRepository', () => {
     it('should update a user', async () => {
       await userRepository.createUser(dummyUser)
 
-      const actual = await userRepository.updateUserById(1, {
+      const actual = await userRepository.updateById(1, {
         name: 'New Name',
         email: 'new-email@email.com',
         password: '87654321'
@@ -134,7 +134,7 @@ describe('UserRepository', () => {
       })
 
       try {
-        await userRepository.updateUserById(1, {
+        await userRepository.updateById(1, {
           name: 'New Name',
           email: 'new-email@email.com',
           password: '87654321'
@@ -150,7 +150,7 @@ describe('UserRepository', () => {
     it('should delete a user', async () => {
       await userRepository.createUser(dummyUser)
 
-      const actual = await userRepository.deleteUser(1)
+      const actual = await userRepository.deleteById(1)
 
       expect(actual).toBe(undefined)
     })
@@ -162,7 +162,7 @@ describe('UserRepository', () => {
       })
 
       try {
-        await userRepository.updateUserById(1, {
+        await userRepository.updateById(1, {
           name: 'New Name',
           email: 'new-email@email.com',
           password: '87654321'

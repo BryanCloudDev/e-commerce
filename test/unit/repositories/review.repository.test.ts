@@ -157,7 +157,7 @@ describe('ReviewRepository', () => {
         user: createdUser
       })
 
-      const actual = await reviewRepository.updateReviewById(1, {
+      const actual = await reviewRepository.updateById(1, {
         rating,
         user: createdUser
       })
@@ -175,7 +175,7 @@ describe('ReviewRepository', () => {
         // creating a user
         const createdUser = await userRepository.createUser(user)
 
-        await reviewRepository.updateReviewById(1, {
+        await reviewRepository.updateById(1, {
           rating,
           user: createdUser
         })
@@ -199,7 +199,7 @@ describe('ReviewRepository', () => {
         user: createdUser
       })
 
-      const actual = await reviewRepository.deleteReviewById(1)
+      const actual = await reviewRepository.deleteById(1)
 
       expect(actual).toBe(undefined)
     })
@@ -211,7 +211,7 @@ describe('ReviewRepository', () => {
       })
 
       try {
-        await reviewRepository.deleteReviewById(1)
+        await reviewRepository.deleteById(1)
       } catch (error) {
         expect(error).toBeInstanceOf(Error)
         expect(error.message).toBe(
