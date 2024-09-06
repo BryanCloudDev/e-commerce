@@ -1,6 +1,9 @@
+import {
+  BadRequestException,
+  NotFoundException
+} from '../helpers/errors.helper'
 import { createUserRepository, UserRepository } from '../repositories'
 import { exceptionHandler } from '../helpers/error-handler.handler'
-import { NotFoundException } from '../helpers/errors.helper'
 import { AppDataSource, Logger } from '../config'
 import { CreateUser } from '../interfaces'
 import { User } from '../models'
@@ -18,6 +21,12 @@ export class UserService {
     try {
       await this.userRespository.createUser(createUser)
     } catch (error) {
+      if (error.code === 'ER_DUP_ENTRY') {
+        throw new BadRequestException(
+          `Email address ${createUser.email} is already in use`
+        )
+      }
+
       exceptionHandler(this.logger, error)
     }
   }
