@@ -26,19 +26,20 @@ export class UserService {
           `Email address ${createUser.email} is already in use`
         )
       }
-
+      
       exceptionHandler(this.logger, error)
     }
   }
 
   async findById(id: number): Promise<User> {
-    this.logger.info('findUserById')
+    this.logger.info('findById')
     try {
       const user = await this.userRespository.findById(id)
 
       if (!user) {
         throw new NotFoundException(`User with id ${id} was not found`)
       }
+
       return user
     } catch (error) {
       exceptionHandler(this.logger, error)
@@ -54,7 +55,7 @@ export class UserService {
     }
   }
 
-  async updateById(id: number, updateData: Partial<CreateUser>): Promise<void> {
+  async updateById(id: number, updateData: Partial<User>): Promise<void> {
     this.logger.info('updateById')
     try {
       await this.findById(id)
