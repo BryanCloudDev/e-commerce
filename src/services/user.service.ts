@@ -26,7 +26,7 @@ export class UserService {
           `Email address ${createUser.email} is already in use`
         )
       }
-      
+
       exceptionHandler(this.logger, error)
     }
   }

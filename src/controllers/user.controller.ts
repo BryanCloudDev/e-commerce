@@ -13,6 +13,8 @@ export class UserController extends BaseController {
 
   private readonly logger = new Logger(UserController.name)
 
+  // using properties instead of methods due to the binding of `this`
+  // for `express` routes
   createUser = async (req: Request, res: Response) => {
     this.logger.info('createUser')
 
