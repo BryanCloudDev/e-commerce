@@ -14,8 +14,8 @@ describe('Product Model', () => {
     })
 
     it('should have a unit price', () => {
-      expect(product.unit_price).not.toBe(null)
-      expect(typeof product.unit_price).toBe('number')
+      expect(product.unitPrice).not.toBe(null)
+      expect(typeof product.unitPrice).toBe('number')
     })
 
     it('should have a rating', () => {
@@ -29,8 +29,8 @@ describe('Product Model', () => {
     })
 
     it('should have an image url', () => {
-      expect(product.image_url).not.toBe(null)
-      expect(typeof product.image_url).toBe('string')
+      expect(product.imageUrl).not.toBe(null)
+      expect(typeof product.imageUrl).toBe('string')
     })
 
     afterAll(() => {

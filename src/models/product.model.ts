@@ -24,7 +24,7 @@ export abstract class Product extends BaseEntity {
     type: 'decimal',
     nullable: false
   })
-  unit_price: number
+  unitPrice: number
 
   @Column({
     comment: 'product rating',
@@ -54,7 +54,7 @@ export abstract class Product extends BaseEntity {
     type: 'varchar',
     nullable: false
   })
-  image_url: string
+  imageUrl: string
 
   // Relations
   // @OneToMany(() => Review, review => review.product)
