@@ -1,12 +1,12 @@
-import { AppTestDataSource } from './data-source'
-import { dummyReview, errorMessage } from './mocks'
-import { Review } from '../../../src/models'
 import {
   createReviewRepository,
   createUserRepository,
   ReviewRepository,
   UserRepository
 } from '../../../src/repositories'
+import { dummyReview, errorMessage } from '../mocks'
+import { AppTestDataSource } from './data-source'
+import { Review } from '../../../src/models'
 
 describe('ReviewRepository', () => {
   let reviewRepository: ReviewRepository

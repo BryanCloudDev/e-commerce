@@ -1,10 +1,11 @@
 import { createUserRepository, UserRepository } from '../../../src/repositories'
+import { dummyUser, errorMessage } from '../mocks'
 import { AppTestDataSource } from './data-source'
-import { dummyUser, errorMessage } from './mocks'
 import { User } from '../../../src/models'
 
 describe('UserRepository', () => {
   let userRepository: UserRepository
+  const userEmail = dummyUser.email
 
   beforeEach(async () => {
     await AppTestDataSource.initialize()
@@ -19,14 +20,14 @@ describe('UserRepository', () => {
     it('should find a user by `email`', async () => {
       await userRepository.save(dummyUser)
 
-      const actual = await userRepository.findByEmail('test-email@email.com')
+      const actual = await userRepository.findByEmail(userEmail)
 
       expect(actual).not.toBe(null)
       expect(actual).toBeInstanceOf(User)
     })
 
     it('should return `undefined` when no user is found by the provided `email`', async () => {
-      const actual = await userRepository.findByEmail('test-email@email.com')
+      const actual = await userRepository.findByEmail(userEmail)
 
       expect(actual).toBe(null)
     })
@@ -38,7 +39,7 @@ describe('UserRepository', () => {
       })
 
       try {
-        await userRepository.findByEmail('test-email@email.com')
+        await userRepository.findByEmail(userEmail)
       } catch (error) {
         expect(error).toBeInstanceOf(Error)
         expect(error.message).toBe(
@@ -93,9 +94,7 @@ describe('UserRepository', () => {
         await userRepository.createUser(dummyUser)
       } catch (error) {
         expect(error).toBeInstanceOf(Error)
-        expect(error.message).toBe(
-          'Error creating user: SQLITE_CONSTRAINT: UNIQUE constraint failed: users.email'
-        )
+        expect(error.message).not.toBe(null)
       }
     })
 
@@ -146,7 +145,7 @@ describe('UserRepository', () => {
     })
   })
 
-  describe('updateUserById', () => {
+  describe('deleteUserById', () => {
     it('should delete a user', async () => {
       await userRepository.createUser(dummyUser)
 

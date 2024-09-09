@@ -1,13 +1,13 @@
-import { AppTestDataSource } from './data-source'
-import { dummyOrder, errorMessage } from './mocks'
-import { Order } from '../../../src/models'
 import {
   createOrderRepository,
   createUserRepository,
   OrderRepository,
   UserRepository
 } from '../../../src/repositories'
+import { dummyOrder, errorMessage } from '../mocks'
+import { AppTestDataSource } from './data-source'
 import { OrderStatus } from '../../../src/enums'
+import { Order } from '../../../src/models'
 
 describe('OrderRepository', () => {
   let orderRepository: OrderRepository
