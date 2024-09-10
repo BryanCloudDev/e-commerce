@@ -1,13 +1,13 @@
 import { Response } from 'express'
 
 export abstract class BaseController {
-  public response<T>(content: T): { data: T } {
+  protected response<T>(content: T): { data: T } {
     return {
       data: content
     }
   }
 
-  public async methodHandler(method: () => any, res: Response) {
+  protected async methodHandler(method: () => any, res: Response) {
     try {
       await method()
     } catch (error) {
