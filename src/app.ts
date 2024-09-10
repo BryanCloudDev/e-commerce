@@ -1,7 +1,7 @@
 import express, { type Application, Router } from 'express'
 import cors from 'cors'
 import { Routes } from './enums'
-import { ApiRoute, HelloWorldRouter } from './routes'
+import { ApiRoute } from './routes'
 import { pathDoesNotExist } from './middlewares/route-not-found.middleware'
 import { connectToDatabase } from './config/data-source'
 import { env } from './config/env'
@@ -13,10 +13,7 @@ export class App {
   private readonly _apiRoute: string = `/${Routes.API}`
   private readonly _port: number = env.appPort
 
-  constructor(
-    readonly helloWorldRouter = new HelloWorldRouter(),
-    readonly apiRouter = new ApiRoute()
-  ) {
+  constructor(readonly apiRouter = new ApiRoute()) {
     this.initialize()
   }
 
@@ -42,7 +39,6 @@ export class App {
   private _routes(): void {
     // routes to load
     this._router.use(this.apiRouter.router)
-    this._router.use(this.helloWorldRouter.router)
 
     // API router where all routes will be loaded to
     this._app.use(this._apiRoute, this._router)
