@@ -20,7 +20,7 @@ export class UserController extends BaseController {
 
     const createUser: CreateUser = req.body
 
-    super.methodHandler(async () => {
+    await super.methodHandler(async () => {
       await this.userService.createUser(createUser)
       res.status(HttpStatusCodes.CREATED)
     }, res)
@@ -31,7 +31,7 @@ export class UserController extends BaseController {
 
     const { id } = req.params
 
-    super.methodHandler(async () => {
+    await super.methodHandler(async () => {
       const user = await this.userService.findById(+id)
       res.status(HttpStatusCodes.OK).json(this.response(user))
     }, res)
@@ -42,7 +42,7 @@ export class UserController extends BaseController {
 
     const { email } = req.params
 
-    super.methodHandler(async () => {
+    await super.methodHandler(async () => {
       const user = await this.userService.findByEmail(email)
       res.status(HttpStatusCodes.OK).json(this.response(user))
     }, res)
@@ -54,7 +54,7 @@ export class UserController extends BaseController {
     const { id } = req.params
     const updateData: Partial<User> = req.body
 
-    super.methodHandler(async () => {
+    await super.methodHandler(async () => {
       await this.userService.updateById(+id, updateData)
       res.status(HttpStatusCodes.NO_CONTENT)
     }, res)
@@ -62,9 +62,10 @@ export class UserController extends BaseController {
 
   deleteById = async (req: Request, res: Response): Promise<void> => {
     this.logger.info('deleteById')
-    const id = req.params
 
-    super.methodHandler(async () => {
+    const { id } = req.params
+
+    await super.methodHandler(async () => {
       await this.userService.deleteById(+id)
       res.status(HttpStatusCodes.NO_CONTENT)
     }, res)
