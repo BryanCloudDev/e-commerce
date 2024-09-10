@@ -20,7 +20,7 @@ export class OrderController extends BaseController {
 
     const createOrder: CreateOrder = req.body
 
-    super.methodHandler(async () => {
+    await super.methodHandler(async () => {
       await this.orderService.createOrder(createOrder)
       res.status(HttpStatusCodes.CREATED)
     }, res)
@@ -31,7 +31,7 @@ export class OrderController extends BaseController {
 
     const { id } = req.params
 
-    super.methodHandler(async () => {
+    await super.methodHandler(async () => {
       const order = await this.orderService.findById(+id)
       res.status(HttpStatusCodes.OK).json(this.response(order))
     }, res)
@@ -42,7 +42,7 @@ export class OrderController extends BaseController {
 
     const { id } = req.params
 
-    super.methodHandler(async () => {
+    await super.methodHandler(async () => {
       const orders = await this.orderService.findByUserId(+id)
       res.status(HttpStatusCodes.OK).json(this.response(orders))
     }, res)
@@ -54,7 +54,7 @@ export class OrderController extends BaseController {
     const { id } = req.params
     const updateData: Partial<Order> = req.body
 
-    super.methodHandler(async () => {
+    await super.methodHandler(async () => {
       await this.orderService.updateById(+id, updateData)
       res.status(HttpStatusCodes.NO_CONTENT)
     }, res)
@@ -62,9 +62,9 @@ export class OrderController extends BaseController {
 
   deleteById = async (req: Request, res: Response): Promise<void> => {
     this.logger.info('deleteById')
-    const id = req.params
+    const { id } = req.params
 
-    super.methodHandler(async () => {
+    await super.methodHandler(async () => {
       await this.orderService.deleteById(+id)
       res.status(HttpStatusCodes.NO_CONTENT)
     }, res)
