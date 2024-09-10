@@ -61,7 +61,7 @@ describe('UserController', () => {
 
       expect(userService.findById).toHaveBeenCalledWith(1)
       expect(res.status).toHaveBeenCalledWith(HttpStatusCodes.OK)
-      expect(res.json).toHaveBeenCalledWith(userController.response(mockUser))
+      expect(res.json).toHaveBeenCalledWith({ data: mockUser })
     })
 
     it('should handle exceptions and return status code `500`', async () => {
@@ -86,7 +86,7 @@ describe('UserController', () => {
 
       expect(userService.findByEmail).toHaveBeenCalledWith('test@example.com')
       expect(res.status).toHaveBeenCalledWith(HttpStatusCodes.OK)
-      expect(res.json).toHaveBeenCalledWith(userController.response(mockUser))
+      expect(res.json).toHaveBeenCalledWith({ data: mockUser })
     })
 
     it('should handle exceptions and return status code `500`', async () => {
