@@ -1,27 +1,27 @@
 import { Request, Response } from 'express'
 import { BaseController } from './base-controller'
-import { CreateOrder } from '../interfaces'
+import { CreateReview } from '../interfaces'
+import { ReviewService } from '../services'
 import { HttpStatusCodes } from '../enums'
-import { OrderService } from '../services'
 import { Logger } from '../config'
-import { Order } from '../models'
+import { Review } from '../models'
 
-export class OrderController extends BaseController {
+export class ReviewController extends BaseController {
   constructor(
-    private readonly orderService: OrderService = new OrderService()
+    private readonly reviewService: ReviewService = new ReviewService()
   ) {
     super()
   }
 
-  private readonly logger = new Logger(OrderController.name)
+  private readonly logger = new Logger(ReviewController.name)
 
-  createOrder = async (req: Request, res: Response) => {
-    this.logger.info('createOrder')
+  createReview = async (req: Request, res: Response) => {
+    this.logger.info('createReview')
 
-    const createOrder: CreateOrder = req.body
+    const createReview: CreateReview = req.body
 
     super.methodHandler(async () => {
-      await this.orderService.createOrder(createOrder)
+      await this.reviewService.createReview(createReview)
       res.status(HttpStatusCodes.CREATED)
     }, res)
   }
@@ -32,8 +32,8 @@ export class OrderController extends BaseController {
     const { id } = req.params
 
     super.methodHandler(async () => {
-      const order = await this.orderService.findById(+id)
-      res.status(HttpStatusCodes.OK).json(this.response(order))
+      const review = await this.reviewService.findById(+id)
+      res.status(HttpStatusCodes.OK).json(this.response(review))
     }, res)
   }
 
@@ -43,8 +43,8 @@ export class OrderController extends BaseController {
     const { id } = req.params
 
     super.methodHandler(async () => {
-      const orders = await this.orderService.findByUserId(+id)
-      res.status(HttpStatusCodes.OK).json(this.response(orders))
+      const reviews = await this.reviewService.findByUserId(+id)
+      res.status(HttpStatusCodes.OK).json(this.response(reviews))
     }, res)
   }
 
@@ -52,10 +52,10 @@ export class OrderController extends BaseController {
     this.logger.info('updateById')
 
     const { id } = req.params
-    const updateData: Partial<Order> = req.body
+    const updateData: Partial<Review> = req.body
 
     super.methodHandler(async () => {
-      await this.orderService.updateById(+id, updateData)
+      await this.reviewService.updateById(+id, updateData)
       res.status(HttpStatusCodes.NO_CONTENT)
     }, res)
   }
@@ -65,7 +65,7 @@ export class OrderController extends BaseController {
     const id = req.params
 
     super.methodHandler(async () => {
-      await this.orderService.deleteById(+id)
+      await this.reviewService.deleteById(+id)
       res.status(HttpStatusCodes.NO_CONTENT)
     }, res)
   }
