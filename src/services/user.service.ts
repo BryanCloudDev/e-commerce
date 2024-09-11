@@ -66,6 +66,12 @@ export class UserService {
       await this.findById(id)
       await this.userRespository.updateById(id, updateData)
     } catch (error) {
+      if (error.message.includes('Duplicate entry')) {
+        throw new BadRequestException(
+          `Email address ${updateData.email} is already in use`
+        )
+      }
+
       exceptionHandler(this.logger, error)
     }
   }
