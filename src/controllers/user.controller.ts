@@ -22,7 +22,7 @@ export class UserController extends BaseController {
 
     await super.methodHandler(async () => {
       await this.userService.createUser(createUser)
-      res.status(HttpStatusCodes.CREATED)
+      res.status(HttpStatusCodes.CREATED).send()
     }, res)
   }
 
@@ -56,7 +56,7 @@ export class UserController extends BaseController {
 
     await super.methodHandler(async () => {
       await this.userService.updateById(+id, updateData)
-      res.status(HttpStatusCodes.NO_CONTENT)
+      res.status(HttpStatusCodes.NO_CONTENT).send()
     }, res)
   }
 
@@ -67,7 +67,7 @@ export class UserController extends BaseController {
 
     await super.methodHandler(async () => {
       await this.userService.deleteById(+id)
-      res.status(HttpStatusCodes.NO_CONTENT)
+      res.status(HttpStatusCodes.NO_CONTENT).send()
     }, res)
   }
 }
