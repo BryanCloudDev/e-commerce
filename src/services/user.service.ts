@@ -21,7 +21,7 @@ export class UserService {
     try {
       await this.userRespository.createUser(createUser)
     } catch (error) {
-      if (error.code === 'ER_DUP_ENTRY') {
+      if (error.message.includes('Duplicate entry')) {
         throw new BadRequestException(
           `Email address ${createUser.email} is already in use`
         )
@@ -49,7 +49,12 @@ export class UserService {
   async findByEmail(email: string): Promise<User> {
     this.logger.info('findUserByEmail')
     try {
-      return await this.userRespository.findByEmail(email)
+      const user = await this.userRespository.findByEmail(email)
+
+      if (!user) {
+        throw new NotFoundException(`User with email ${email} was not found`)
+      }
+      return user
     } catch (error) {
       exceptionHandler(this.logger, error)
     }
