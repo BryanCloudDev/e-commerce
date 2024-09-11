@@ -1,12 +1,12 @@
 import { BadRequestException, NotFoundException } from '../../../src/helpers'
 import { UserRepository } from '../../../src/repositories'
+import { CreateUserDto, UpdateUserDto } from '../../../src/dto/user.dto'
 import { dummyUser, dummyResponseUser } from '../mocks'
-import { CreateUser } from '../../../src/interfaces'
 import { UserService } from '../../../src/services'
 import { User } from '../../../src/models'
 
 describe('UserService', () => {
-  let user: CreateUser
+  let user: CreateUserDto
   let userRepository: jest.Mocked<UserRepository>
   let userService: UserService
   let responseUser: User
@@ -100,7 +100,7 @@ describe('UserService', () => {
   describe('updateById', () => {
     it('should update a user', async () => {
       const id = 1
-      const updateData: Partial<CreateUser> = {
+      const updateData: UpdateUserDto = {
         email: 'newemail@example.com'
       }
 

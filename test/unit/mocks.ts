@@ -1,9 +1,10 @@
-import { CreateOrder, CreateReview, CreateUser } from '../../src/interfaces'
+import { CreateOrder, CreateReview } from '../../src/interfaces'
 import { InternalServerErrorException } from '../../src/helpers'
 import { Order, Review, User } from '../../src/models'
 import { OrderStatus } from '../../src/enums'
+import { CreateUserDto } from 'src/dto/user.dto'
 
-export const dummyUser: CreateUser = {
+export const dummyUser: CreateUserDto = {
   email: 'test@example.com',
   name: 'John Doe',
   password: '1234567'
