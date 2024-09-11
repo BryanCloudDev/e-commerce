@@ -1,10 +1,9 @@
 import { Request, Response } from 'express'
+import { CreateUserDto, UpdateUserDto } from '../dto/user.dto'
 import { BaseController } from './base-controller'
 import { HttpStatusCodes } from '../enums'
-import { CreateUser } from '../interfaces'
 import { UserService } from '../services'
 import { Logger } from '../config'
-import { User } from '../models'
 
 export class UserController extends BaseController {
   constructor(private readonly userService: UserService = new UserService()) {
@@ -18,7 +17,7 @@ export class UserController extends BaseController {
   createUser = async (req: Request, res: Response) => {
     this.logger.info('createUser')
 
-    const createUser: CreateUser = req.body
+    const createUser: CreateUserDto = req.body
 
     await super.methodHandler(async () => {
       await this.userService.createUser(createUser)
@@ -52,7 +51,7 @@ export class UserController extends BaseController {
     this.logger.info('updateById')
 
     const { id } = req.params
-    const updateData: Partial<User> = req.body
+    const updateData: UpdateUserDto = req.body
 
     await super.methodHandler(async () => {
       await this.userService.updateById(+id, updateData)

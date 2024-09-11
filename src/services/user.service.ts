@@ -4,8 +4,8 @@ import {
 } from '../helpers/errors.helper'
 import { createUserRepository, UserRepository } from '../repositories'
 import { exceptionHandler } from '../helpers/error-handler.handler'
+import { CreateUserDto, UpdateUserDto } from '../dto/user.dto'
 import { AppDataSource, Logger } from '../config'
-import { CreateUser } from '../interfaces'
 import { User } from '../models'
 
 export class UserService {
@@ -16,7 +16,7 @@ export class UserService {
   ) {}
   private readonly logger = new Logger(UserService.name)
 
-  async createUser(createUser: CreateUser): Promise<void> {
+  async createUser(createUser: CreateUserDto): Promise<void> {
     this.logger.info('createUser')
     try {
       await this.userRespository.createUser(createUser)
@@ -60,11 +60,14 @@ export class UserService {
     }
   }
 
-  async updateById(id: number, updateData: Partial<User>): Promise<void> {
+  async updateById(id: number, updateData: UpdateUserDto): Promise<void> {
     this.logger.info('updateById')
     try {
       await this.findById(id)
-      await this.userRespository.updateById(id, updateData)
+
+      if (Object.keys(updateData).length) {
+        await this.userRespository.updateById(id, updateData)
+      }
     } catch (error) {
       if (error.message.includes('Duplicate entry')) {
         throw new BadRequestException(

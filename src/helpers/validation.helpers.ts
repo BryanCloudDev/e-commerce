@@ -1,39 +1,39 @@
-import { NextFunction, Response } from 'express'
+import { NextFunction, Response, Request } from 'express'
 import { HttpStatusCodes } from '../enums'
 
 export const checkIfIdIsInteger = (
-  id: string,
+  req: Request,
   res: Response,
   next: NextFunction
-): void => {
+): Response => {
+  const { id } = req.params
+
   if (Number.isNaN(+id)) {
-    res.status(HttpStatusCodes.BAD_REQUEST).json({
+    return res.status(HttpStatusCodes.BAD_REQUEST).json({
       error: {
         message: 'Id must be integer type'
       }
     })
-    return
   }
 
   next()
 }
 
 export const checkIfEmailIsValid = (
-  email: string,
+  req: Request,
   res: Response,
   next: NextFunction
-): void => {
+): Response => {
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/g
-
+  const { email } = req.params
   const cleanedInput = email.trim()
 
   if (!cleanedInput || !emailRegex.test(cleanedInput)) {
-    res.status(HttpStatusCodes.BAD_REQUEST).json({
+    return res.status(HttpStatusCodes.BAD_REQUEST).json({
       error: {
         message: 'A valid email address must be provided'
       }
     })
-    return
   }
 
   next()
