@@ -1,6 +1,6 @@
 import { BadRequestException, NotFoundException } from '../../../src/helpers'
+import { CreateUserDto, UpdateUserDto } from '../../../src/dto'
 import { UserRepository } from '../../../src/repositories'
-import { CreateUserDto, UpdateUserDto } from '../../../src/dto/user.dto'
 import { dummyUser, dummyResponseUser } from '../mocks'
 import { UserService } from '../../../src/services'
 import { User } from '../../../src/models'

@@ -1,15 +1,16 @@
+import { dummyReview, dummyResponseReview, dummyResponseUser } from '../mocks'
+import { ReviewService, UserService } from '../../../src/services'
 import { ReviewRepository } from '../../../src/repositories'
-import { dummyReview, dummyResponseReview } from '../mocks'
 import { NotFoundException } from '../../../src/helpers'
-import { CreateReview } from '../../../src/interfaces'
-import { ReviewService } from '../../../src/services'
+import { CreateReviewDto } from '../../../src/dto'
 import { Review } from '../../../src/models'
 
 describe('ReviewService', () => {
-  let review: CreateReview
+  let review: CreateReviewDto
   let reviewRepository: jest.Mocked<ReviewRepository>
   let reviewService: ReviewService
   let responseReview: Review
+  let userService: jest.Mocked<UserService>
 
   beforeEach(() => {
     review = dummyReview()
@@ -20,7 +21,10 @@ describe('ReviewService', () => {
       updateById: jest.fn(),
       deleteById: jest.fn()
     } as unknown as jest.Mocked<ReviewRepository>
-    reviewService = new ReviewService(reviewRepository)
+    userService = {
+      findById: jest.fn()
+    } as unknown as jest.Mocked<UserService>
+    reviewService = new ReviewService(reviewRepository, userService)
     responseReview = dummyResponseReview()
   })
 
@@ -30,13 +34,16 @@ describe('ReviewService', () => {
 
   describe('createReview', () => {
     it('should create a review', async () => {
-      reviewRepository.createReview.mockResolvedValue(
-        Promise.resolve(undefined)
-      )
+      const user = dummyResponseUser()
+      const userId = 1
 
-      const actual = await reviewService.createReview(review)
+      reviewRepository.createReview.mockResolvedValue(undefined)
+      userService.findById.mockResolvedValue(user)
 
-      expect(reviewRepository.createReview).toHaveBeenCalledWith(review)
+      const actual = await reviewService.createReview(review, userId)
+
+      expect(reviewRepository.createReview).toHaveBeenCalledWith(review, user)
+      expect(userService.findById).toHaveBeenCalledWith(userId)
       expect(actual).toBe(undefined)
     })
   })

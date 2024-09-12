@@ -4,14 +4,15 @@ import {
   ReviewRepository,
   UserRepository
 } from '../../../src/repositories'
-import { dummyReview, errorMessage } from '../mocks'
+import { dummyUser, dummyReview, errorMessage } from '../mocks'
 import { AppTestDataSource } from './data-source'
 import { Review } from '../../../src/models'
 
 describe('ReviewRepository', () => {
   let reviewRepository: ReviewRepository
   let userRepository: UserRepository
-  const { user, rating } = dummyReview()
+  const rating = dummyReview()
+  const user = dummyUser
 
   beforeEach(async () => {
     await AppTestDataSource.initialize()
@@ -29,15 +30,9 @@ describe('ReviewRepository', () => {
       const createdUser = await userRepository.createUser(user)
 
       // creating 2 reviews
-      await reviewRepository.createReview({
-        rating,
-        user: createdUser
-      })
+      await reviewRepository.createReview(rating, createdUser)
 
-      await reviewRepository.createReview({
-        rating,
-        user: createdUser
-      })
+      await reviewRepository.createReview(rating, createdUser)
 
       const actual = await reviewRepository.findByUserId(1)
 
@@ -76,10 +71,7 @@ describe('ReviewRepository', () => {
       const createdUser = await userRepository.createUser(user)
 
       // creating a review
-      await reviewRepository.createReview({
-        rating,
-        user: createdUser
-      })
+      await reviewRepository.createReview(rating, createdUser)
 
       const actual = await reviewRepository.findById(1)
 
@@ -116,10 +108,7 @@ describe('ReviewRepository', () => {
       const createdUser = await userRepository.createUser(user)
 
       // creating a review
-      const actual = await reviewRepository.createReview({
-        rating,
-        user: createdUser
-      })
+      const actual = await reviewRepository.createReview(rating, createdUser)
 
       expect(actual).not.toBe(null)
       expect(actual).toBeInstanceOf(Review)
@@ -135,10 +124,7 @@ describe('ReviewRepository', () => {
         // creating a user
         const createdUser = await userRepository.createUser(user)
 
-        await reviewRepository.createReview({
-          rating,
-          user: createdUser
-        })
+        await reviewRepository.createReview(rating, createdUser)
       } catch (error) {
         expect(error).toBeInstanceOf(Error)
         expect(error.message).toBe(`Error creating review: ${errorMessage}`)
@@ -152,15 +138,9 @@ describe('ReviewRepository', () => {
       const createdUser = await userRepository.createUser(user)
 
       // creating a review
-      await reviewRepository.createReview({
-        rating,
-        user: createdUser
-      })
+      await reviewRepository.createReview(rating, createdUser)
 
-      const actual = await reviewRepository.updateById(1, {
-        rating,
-        user: createdUser
-      })
+      const actual = await reviewRepository.updateById(1, rating)
 
       expect(actual).toBe(undefined)
     })
@@ -173,12 +153,9 @@ describe('ReviewRepository', () => {
 
       try {
         // creating a user
-        const createdUser = await userRepository.createUser(user)
+        await userRepository.createUser(user)
 
-        await reviewRepository.updateById(1, {
-          rating,
-          user: createdUser
-        })
+        await reviewRepository.updateById(1, rating)
       } catch (error) {
         expect(error).toBeInstanceOf(Error)
         expect(error.message).toBe(
@@ -191,13 +168,10 @@ describe('ReviewRepository', () => {
   describe('deleteReview', () => {
     it('should delete a `review`', async () => {
       // creating a user
-      const createdUser = await userRepository.createUser(user)
+      const userCreated = await userRepository.createUser(user)
 
       // creating a review
-      await reviewRepository.createReview({
-        rating,
-        user: createdUser
-      })
+      await reviewRepository.createReview(rating, userCreated)
 
       const actual = await reviewRepository.deleteById(1)
 
