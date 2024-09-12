@@ -1,8 +1,9 @@
-import { CreateOrder, CreateReview } from '../../src/interfaces'
 import { InternalServerErrorException } from '../../src/helpers'
 import { Order, Review, User } from '../../src/models'
+import { CreateUserDto } from '../../src/dto/user.dto'
+import { CreateOrder } from '../../src/interfaces'
+import { CreateReviewDto } from '../../src/dto'
 import { OrderStatus } from '../../src/enums'
-import { CreateUserDto } from 'src/dto/user.dto'
 
 export const dummyUser: CreateUserDto = {
   email: 'test@example.com',
@@ -25,15 +26,14 @@ export const dummyResponseUser = (): User => {
   return user
 }
 
-export const dummyReview = (): CreateReview => {
+export const dummyReview = (): CreateReviewDto => {
   const user = new User()
   user.name = dummyUser.name
   user.email = dummyUser.email
   user.password = dummyUser.password
 
   return {
-    rating: 10,
-    user
+    rating: 10
   }
 }
 

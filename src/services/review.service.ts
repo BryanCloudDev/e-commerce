@@ -1,22 +1,28 @@
 import { createReviewRepository, ReviewRepository } from '../repositories'
 import { exceptionHandler } from '../helpers/error-handler.handler'
 import { NotFoundException } from '../helpers/errors.helper'
+import { CreateReviewDto, UpdateReviewDto } from '../dto'
 import { AppDataSource, Logger } from '../config'
-import { CreateReview } from '../interfaces'
 import { Review } from '../models'
+import { UserService } from './user.service'
 
 export class ReviewService {
   constructor(
     private readonly reviewRepository: ReviewRepository = createReviewRepository(
       AppDataSource
-    )
+    ),
+    private readonly userService: UserService = new UserService()
   ) {}
   private readonly logger = new Logger(ReviewService.name)
 
-  async createReview(createReview: CreateReview): Promise<void> {
+  async createReview(
+    createReview: CreateReviewDto,
+    userId: number
+  ): Promise<void> {
     this.logger.info('createReview')
     try {
-      await this.reviewRepository.createReview(createReview)
+      const user = await this.userService.findById(userId)
+      await this.reviewRepository.createReview(createReview, user)
     } catch (error) {
       exceptionHandler(this.logger, error)
     }
@@ -46,7 +52,7 @@ export class ReviewService {
     }
   }
 
-  async updateById(id: number, updateData: Partial<Review>): Promise<void> {
+  async updateById(id: number, updateData: UpdateReviewDto): Promise<void> {
     this.logger.info('updateById')
     try {
       await this.findById(id)

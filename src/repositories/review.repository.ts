@@ -5,9 +5,9 @@ import {
   QueryRunner,
   Repository
 } from 'typeorm'
-import { CreateReview } from '../interfaces'
+import { CreateReviewDto, UpdateReviewDto } from '../dto'
 import { Logger } from '../config/logger'
-import { Review } from '../models'
+import { Review, User } from '../models'
 
 export class ReviewRepository extends Repository<Review> {
   constructor(
@@ -55,10 +55,12 @@ export class ReviewRepository extends Repository<Review> {
    * @param review - The id of the user who wrote the review.
    * @returns A promise that resolves to the created review.
    */
-  async createReview(review: CreateReview): Promise<Review> {
+  async createReview(review: CreateReviewDto, user: User): Promise<Review> {
     this.logger.info('createReview')
     try {
       const reviewInstance = this.create(review)
+      reviewInstance.user = user
+
       return await this.save(reviewInstance)
     } catch (error) {
       this.logger.error(error.message)
@@ -72,7 +74,7 @@ export class ReviewRepository extends Repository<Review> {
    * @param updateData - A partial object containing the review fields to be updated.
    * @returns A promise that resolves 'void' when the operation is complete.
    */
-  async updateById(id: number, updateData: Partial<Review>): Promise<void> {
+  async updateById(id: number, updateData: UpdateReviewDto): Promise<void> {
     this.logger.info('updateById')
     try {
       await this.update(id, updateData)
