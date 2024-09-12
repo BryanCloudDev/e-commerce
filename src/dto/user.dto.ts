@@ -17,7 +17,7 @@ const emailAddressErrorMessage: string = [
   'At least one special character (such as @, #, !, etc.)'
 ].join(', ')
 
-class BaseUserDto {
+abstract class BaseUserDto {
   @IsString()
   @MinLength(3)
   @MaxLength(50)
