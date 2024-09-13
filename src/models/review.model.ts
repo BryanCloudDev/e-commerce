@@ -8,7 +8,7 @@ export class Review extends BaseEntity {
   })
   user: User
 
-  // @ManyToOne(() => product, user => product.ratings)
+  // @ManyToOne(() => Product, product => product.reviews)
   // product: Product
 
   @Column({

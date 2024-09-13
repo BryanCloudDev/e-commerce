@@ -57,6 +57,10 @@ export abstract class Product extends BaseEntity {
   imageUrl: string
 
   // Relations
+
   // @OneToMany(() => Review, review => review.product)
   // reviews: Review[]
+
+  // @ManyToMany(() => ProductOrder, productsOrder => productsOrder.product)
+  // productsOrder: ProductOrder[]
 }

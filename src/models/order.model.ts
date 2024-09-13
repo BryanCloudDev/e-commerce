@@ -1,6 +1,6 @@
-import { Column, Entity, ManyToOne } from 'typeorm'
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm'
 import { OrderStatus } from '../enums'
-import { BaseEntity, User } from './'
+import { BaseEntity, ProductOrder, User } from './'
 
 @Entity({ name: 'orders' })
 export class Order extends BaseEntity {
@@ -61,4 +61,7 @@ export class Order extends BaseEntity {
     nullable: false
   })
   user: User
+
+  @OneToMany(() => ProductOrder, productsOrder => productsOrder.order)
+  productsOrder: ProductOrder[]
 }
