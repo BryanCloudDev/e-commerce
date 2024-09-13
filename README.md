@@ -19,7 +19,7 @@ Intial project in order to create an e-commerce application for developing purpo
 ## Installation
 
 ```bash
-$ yarn install
+$ npm install
 ```
 
 Then we need to run the following command in order to get the database running, make sure you have docker installed:
@@ -32,10 +32,10 @@ $ docker compose up
 
 ```bash
 # development
-$ yarn start:dev
+$ npm run start:dev
 
 # production mode
-$ yarn start
+$ npm run start
 ```
 
 ## Build the application
@@ -43,20 +43,20 @@ $ yarn start
 ```bash
 
 # build
-$ yarn build
+$ npm run build
 ```
 
 ## Test
 
 ```bash
 # unit tests
-$ yarn run test
+$ npm run test
 
-# e2e tests
-$ yarn run test:e2e
+# e2e tests not `implemented yet`
+$ npm run test:e2e
 
 # test coverage
-$ yarn run test:cov
+$ npm run test:cov
 ```
 
 

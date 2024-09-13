@@ -1,4 +1,5 @@
 import { CreateOrder, CreateReview, CreateUser } from '../../src/interfaces'
+import { InternalServerErrorException } from '../../src/helpers'
 import { Order, Review, User } from '../../src/models'
 import { OrderStatus } from '../../src/enums'
 
@@ -80,6 +81,8 @@ export const dummyResponseOrder = (): Order => {
 }
 
 export const errorMessage = 'Forced error for testing purposes'
+
+export const httpException = new InternalServerErrorException(errorMessage)
 
 export const mockFunction = <T extends (...args: any[]) => any>(fn: T) => {
   return fn as jest.MockedFunction<T>
