@@ -1,25 +1,30 @@
 import express, { type Application, Router } from 'express'
 import cors from 'cors'
-import { Routes } from './enums'
-import { ApiRoute } from './routes'
 import { pathDoesNotExist } from './middlewares/route-not-found.middleware'
+import { ApiRoute, OrderRouter, ReviewRouter, UserRouter } from './routes'
 import { connectToDatabase } from './config/data-source'
-import { env } from './config/env'
 import { Logger } from './config/logger'
+import { env } from './config/env'
+import { Routes } from './enums'
 
 export class App {
-  private readonly _app: Application = express()
-  private readonly _router: Router = Router()
   private readonly _apiRoute: string = `/${Routes.API}`
+  private readonly _app: Application = express()
   private readonly _port: number = env.appPort
+  private readonly _router: Router = Router()
 
-  constructor(readonly apiRouter = new ApiRoute()) {
-    this.initialize()
+  constructor(
+    readonly userRouter = new UserRouter(),
+    readonly apiRouter = new ApiRoute(),
+    readonly orderRouter = new OrderRouter(),
+    readonly reviewRouter = new ReviewRouter()
+  ) {
+    this._initialize()
   }
 
   private readonly logger = new Logger(App.name)
 
-  private async initialize(): Promise<void> {
+  private async _initialize(): Promise<void> {
     await connectToDatabase()
     this._middleware()
     this._routes()
@@ -39,6 +44,9 @@ export class App {
   private _routes(): void {
     // routes to load
     this._router.use(this.apiRouter.router)
+    this._router.use(this.orderRouter.router)
+    this._router.use(this.reviewRouter.router)
+    this._router.use(this.userRouter.router)
 
     // API router where all routes will be loaded to
     this._app.use(this._apiRoute, this._router)

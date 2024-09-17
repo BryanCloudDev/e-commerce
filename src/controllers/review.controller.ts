@@ -3,8 +3,8 @@ import { BaseController } from './base-controller'
 import { CreateReview } from '../interfaces'
 import { ReviewService } from '../services'
 import { HttpStatusCodes } from '../enums'
+import { UpdateReviewDto } from '../dto'
 import { Logger } from '../config'
-import { Review } from '../models'
 
 export class ReviewController extends BaseController {
   constructor(
@@ -19,10 +19,11 @@ export class ReviewController extends BaseController {
     this.logger.info('createReview')
 
     const createReview: CreateReview = req.body
+    const { id } = req.params
 
     await super.methodHandler(async () => {
-      await this.reviewService.createReview(createReview)
-      res.status(HttpStatusCodes.CREATED)
+      await this.reviewService.createReview(createReview, +id)
+      res.status(HttpStatusCodes.CREATED).send()
     }, res)
   }
 
@@ -52,11 +53,11 @@ export class ReviewController extends BaseController {
     this.logger.info('updateById')
 
     const { id } = req.params
-    const updateData: Partial<Review> = req.body
+    const updateData: UpdateReviewDto = req.body
 
     await super.methodHandler(async () => {
       await this.reviewService.updateById(+id, updateData)
-      res.status(HttpStatusCodes.NO_CONTENT)
+      res.status(HttpStatusCodes.NO_CONTENT).send()
     }, res)
   }
 
@@ -66,7 +67,7 @@ export class ReviewController extends BaseController {
 
     await super.methodHandler(async () => {
       await this.reviewService.deleteById(+id)
-      res.status(HttpStatusCodes.NO_CONTENT)
+      res.status(HttpStatusCodes.NO_CONTENT).send()
     }, res)
   }
 }

@@ -32,10 +32,18 @@ describe('ReviewController', () => {
 
   describe('createReview', () => {
     it('should create a review and return status code `201`', async () => {
-      req.body = dummyReview()
+      const reviewDto = dummyReview()
+      const userId = '1'
+
+      req.body = reviewDto
+      req.params.id = userId
+
       await reviewController.createReview(req, res)
 
-      expect(reviewService.createReview).toHaveBeenCalledWith(req.body)
+      expect(reviewService.createReview).toHaveBeenCalledWith(
+        reviewDto,
+        +userId
+      )
       expect(res.status).toHaveBeenCalledWith(HttpStatusCodes.CREATED)
     })
 

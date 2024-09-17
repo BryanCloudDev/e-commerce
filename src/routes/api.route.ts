@@ -13,6 +13,6 @@ export class ApiRoute {
   }
 
   private _ping(): void {
-    this.router.get('/', this.apiController.ping)
+    this.router.get('/', this.apiController.healthCheck)
   }
 }

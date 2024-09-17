@@ -4,8 +4,8 @@ import {
 } from '../helpers/errors.helper'
 import { createUserRepository, UserRepository } from '../repositories'
 import { exceptionHandler } from '../helpers/error-handler.handler'
+import { CreateUserDto, UpdateUserDto } from '../dto/user.dto'
 import { AppDataSource, Logger } from '../config'
-import { CreateUser } from '../interfaces'
 import { User } from '../models'
 
 export class UserService {
@@ -16,12 +16,12 @@ export class UserService {
   ) {}
   private readonly logger = new Logger(UserService.name)
 
-  async createUser(createUser: CreateUser): Promise<void> {
+  async createUser(createUser: CreateUserDto): Promise<void> {
     this.logger.info('createUser')
     try {
       await this.userRespository.createUser(createUser)
     } catch (error) {
-      if (error.code === 'ER_DUP_ENTRY') {
+      if (error.message.includes('Duplicate entry')) {
         throw new BadRequestException(
           `Email address ${createUser.email} is already in use`
         )
@@ -49,18 +49,32 @@ export class UserService {
   async findByEmail(email: string): Promise<User> {
     this.logger.info('findUserByEmail')
     try {
-      return await this.userRespository.findByEmail(email)
+      const user = await this.userRespository.findByEmail(email)
+
+      if (!user) {
+        throw new NotFoundException(`User with email ${email} was not found`)
+      }
+      return user
     } catch (error) {
       exceptionHandler(this.logger, error)
     }
   }
 
-  async updateById(id: number, updateData: Partial<User>): Promise<void> {
+  async updateById(id: number, updateData: UpdateUserDto): Promise<void> {
     this.logger.info('updateById')
     try {
       await this.findById(id)
-      await this.userRespository.updateById(id, updateData)
+
+      if (Object.keys(updateData).length) {
+        await this.userRespository.updateById(id, updateData)
+      }
     } catch (error) {
+      if (error.message.includes('Duplicate entry')) {
+        throw new BadRequestException(
+          `Email address ${updateData.email} is already in use`
+        )
+      }
+
       exceptionHandler(this.logger, error)
     }
   }

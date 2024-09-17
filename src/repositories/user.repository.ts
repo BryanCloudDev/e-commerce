@@ -5,7 +5,7 @@ import {
   QueryRunner,
   Repository
 } from 'typeorm'
-import { CreateUser } from '../interfaces'
+import { CreateUserDto, UpdateUserDto } from '../dto/user.dto'
 import { Logger } from '../config/logger'
 import { User } from '../models'
 
@@ -55,7 +55,7 @@ export class UserRepository extends Repository<User> {
    * @param user - The user data to be created.
    * @returns A promise that resolves to the created user.
    */
-  async createUser(user: CreateUser): Promise<User> {
+  async createUser(user: CreateUserDto): Promise<User> {
     this.logger.info('createUser')
     const { name, email, password } = user
 
@@ -74,7 +74,7 @@ export class UserRepository extends Repository<User> {
    * @param updateData - The partial user data to be updated.
    * @returns A promise that resolves 'void' when the operation is complete.
    */
-  async updateById(id: number, updateData: Partial<CreateUser>): Promise<void> {
+  async updateById(id: number, updateData: UpdateUserDto): Promise<void> {
     this.logger.info('updateById')
     try {
       await this.update(id, updateData)
